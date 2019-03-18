@@ -26,8 +26,6 @@ class TLDetector(object):
         self.waypoints_2d = None
         self.waypoint_tree = None
 
-        self.img_counter = 0
-
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
@@ -80,13 +78,7 @@ class TLDetector(object):
         """
         self.has_image = True
         self.camera_image = msg
-        if(self.img_counter % 3 == 0):
-            light_wp, state = self.process_traffic_lights()
-        else:
-            light_wp = self.last_wp
-            state = self.state
-
-        self.img_counter += 1
+        light_wp, state = self.process_traffic_lights()
 
         '''
         Publish upcoming red lights at camera frequency.
@@ -118,19 +110,6 @@ class TLDetector(object):
         """
         #TODO implement
         closest_idx = self.waypoint_tree.query([x,y], 1)[1]
-        # Check if closest is ahead or behind vehicle
-        closest_coord = self.waypoints_2d[closest_idx]
-        prev_coord = self.waypoints_2d[closest_idx - 1]
-
-        # Equation for hyperplane through closest_coords
-        cl_vect = np.array(closest_coord)
-        prev_vect = np.array(prev_coord)
-        pos_vect = np.array([x,y])
-
-        val = np.dot(cl_vect-prev_vect, pos_vect-cl_vect)
-
-        if val > 0:
-            closest_idx = (closest_idx + 1) % len(self.waypoints_2d)
         return closest_idx
 
     def get_light_state(self, light):
