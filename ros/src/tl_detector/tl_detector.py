@@ -12,6 +12,7 @@ import cv2
 import yaml
 from scipy.spatial import KDTree
 import numpy as np
+#import csv
 
 STATE_COUNT_THRESHOLD = 3
 
@@ -52,6 +53,8 @@ class TLDetector(object):
         self.last_state = TrafficLight.UNKNOWN
         self.last_wp = -1
         self.state_count = 0
+        #self.counter = 0
+        #self.light_list = []
 
         rospy.spin()
 
@@ -78,7 +81,7 @@ class TLDetector(object):
         """
         self.has_image = True
         self.camera_image = msg
-        light_wp, state = self.process_traffic_lights()
+        light_wp, state = self.process_traffic_lights()         
 
         '''
         Publish upcoming red lights at camera frequency.
@@ -108,7 +111,7 @@ class TLDetector(object):
             int: index of the closest waypoint in self.waypoints
 
         """
-        #TODO implement
+        # implement
         closest_idx = self.waypoint_tree.query([x,y], 1)[1]
         return closest_idx
 
@@ -122,6 +125,21 @@ class TLDetector(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
+        # Save Images
+        """ cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
+        resized_image = cv2.resize(cv_image, (320, 240)) 
+        cv2.imwrite("images/img-{0}.png".format(self.counter),resized_image)
+        img = []
+        img.append("img-{0}.png".format(self.counter))
+        img.append(light.state)
+        #self.light_list.append(img)
+        self.counter += 1
+
+        with open("training/output.csv", "a") as f:
+            writer = csv.writer(f)
+            writer.writerow(img)
+        f.close() """
+
         return light.state
         """ if(not self.has_image):
             self.prev_light_loc = None
@@ -149,7 +167,7 @@ class TLDetector(object):
         if(self.pose):
             car_wp_idx = self.get_closest_waypoint(self.pose.pose.position.x, self.pose.pose.position.y)
 
-        #TODO find the closest visible traffic light (if one exists)
+        # find the closest visible traffic light (if one exists)
         diff  = len(self.waypoints.waypoints)
         for i, light in enumerate(self.lights):
             # Get stop line waypoint
