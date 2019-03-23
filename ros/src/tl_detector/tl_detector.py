@@ -42,11 +42,14 @@ class TLDetector(object):
 
         config_string = rospy.get_param("/traffic_light_config")
         self.config = yaml.load(config_string)
+        print(self.config)
+        self.is_site = self.config["is_site"]
+        print("Is Site %d" % self.is_site)
 
         self.upcoming_red_light_pub = rospy.Publisher('/traffic_waypoint', Int32, queue_size=1)
 
         self.bridge = CvBridge()
-        self.light_classifier = TLClassifier()
+        self.light_classifier = TLClassifier(self.is_site)
         self.listener = tf.TransformListener()
 
         self.state = TrafficLight.UNKNOWN
@@ -125,10 +128,10 @@ class TLDetector(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
-        # Save Images
-        """ cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
-        resized_image = cv2.resize(cv_image, (320, 240)) 
-        cv2.imwrite("images/img-{0}.png".format(self.counter),resized_image)
+        """ # Save Images
+        cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
+        #cv_image = cv2.resize(cv_image, (320, 240)) 
+        cv2.imwrite("images/img-{0}.png".format(self.counter),cv_image)
         img = []
         img.append("img-{0}.png".format(self.counter))
         img.append(light.state)
@@ -140,15 +143,15 @@ class TLDetector(object):
             writer.writerow(img)
         f.close() """
 
-        return light.state
-        """ if(not self.has_image):
+        #return light.state
+        if(not self.has_image):
             self.prev_light_loc = None
             return False
 
         cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
-
+        #cv_image = cv2.resize(cv_image, (320, 240))
         #Get classification
-        return self.light_classifier.get_classification(cv_image) """
+        return self.light_classifier.get_classification(cv_image)
 
     def process_traffic_lights(self):
         """Finds closest visible traffic light, if one exists, and determines its
@@ -161,6 +164,7 @@ class TLDetector(object):
         """
         closest_light = None
         line_wp_idx = None
+        car_wp_idx = 0
 
         # List of positions that correspond to the line to stop in front of for a given intersection
         stop_line_positions = self.config['stop_line_positions']
