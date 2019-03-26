@@ -57,6 +57,13 @@ In addition to these packages you will find the following, which are not necessa
     
     A package containing code from  [Autoware](https://github.com/CPFL/Autoware)  which subscribes to  `/final_waypoints`  and publishes target vehicle linear and angular velocities in the form of twist commands to the  `/twist_cmd`  topic.
 
+## Result
+
+A short video showing the successful navigation of the car obeying the traffic lights in a simulator is [here](https://www.youtube.com/watch?v=ZRaw4B1urQs).
+
+[![System Integration](https://img.youtube.com/vi/ZRaw4B1urQs/0.jpg)](https://www.youtube.com/watch?v=ZRaw4B1urQs)
+
+---
 # Setup
 
 Please use **one** of the two installation options, either native **or** docker installation.
