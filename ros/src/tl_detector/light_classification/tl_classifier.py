@@ -9,7 +9,7 @@ class TLClassifier(object):
         if is_site:
             PATH_TO_GRAPH = r'models/site/ssd_mobilenet_frozen_inference_graph.pb'
         else:
-            PATH_TO_GRAPH = r'models/simulator/ssd_mobilenet_frozen_inference_graph.pb'
+            PATH_TO_GRAPH = r'models/simulator/ssd_inception_frozen_inference_graph.pb'
 
         self.graph = tf.Graph()
         self.threshold = .5
@@ -43,32 +43,32 @@ class TLClassifier(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
-        with self.graph.as_default():
+        time = 0
+        with self.graph.as_default():            
             img_expand = np.expand_dims(image, axis=0)
             start = datetime.datetime.now()
             (boxes, scores, classes, num_detections) = self.sess.run(
                 [self.boxes, self.scores, self.classes, self.num_detections],
                 feed_dict={self.image_tensor: img_expand})
             end = datetime.datetime.now()
-            c = end - start
-            print('Detection Time: ',c.total_seconds())
+            time = end - start
 
         boxes = np.squeeze(boxes)
         scores = np.squeeze(scores)
         classes = np.squeeze(classes).astype(np.int32)
 
-        print('SCORES: ', scores[0])
-        print('CLASSES: ', classes[0])
+        #print('SCORES: ', scores[0])
+        #print('CLASSES: ', classes[0])
 
         if scores[0] > self.threshold:
             if classes[0] == 1:
-                print('GREEN')
+                print('Traffic Light: *** GREEN ***, Detection Speed: ', time.total_seconds())
                 return TrafficLight.GREEN
             elif classes[0] == 2:
-                print('RED')
+                print('Traffic Light: *** RED ***, Detection Speed: ', time.total_seconds())
                 return TrafficLight.RED
             elif classes[0] == 3:
-                print('YELLOW')
+                print('Traffic Light: *** YELLOW ***, Detection Speed: ', time.total_seconds())
                 return TrafficLight.YELLOW
 
         return TrafficLight.UNKNOWN

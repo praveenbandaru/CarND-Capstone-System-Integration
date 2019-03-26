@@ -15,5 +15,5 @@ item {
 
 item {
   id: 4
-  name: 'off'
+  name: 'Unknown'
 }
