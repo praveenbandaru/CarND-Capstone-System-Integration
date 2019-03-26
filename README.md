@@ -59,9 +59,9 @@ In addition to these packages you will find the following, which are not necessa
 
 ## Result
 
-A short video showing the successful navigation of the car obeying the traffic lights in a simulator is [here](https://www.youtube.com/watch?v=ZRaw4B1urQs).
+A short video showing the successful navigation of the car obeying the traffic lights in a simulator is [here](https://www.youtube.com/watch?v=ZRaw4B1urQs&list=PL0-S7MOKfBRQ-JmaZ36G4laB8KGmIXlYL&index=14).
 
-[![System Integration](https://img.youtube.com/vi/ZRaw4B1urQs/0.jpg)](https://www.youtube.com/watch?v=ZRaw4B1urQs)
+[![System Integration](https://img.youtube.com/vi/ZRaw4B1urQs/0.jpg)](https://www.youtube.com/watch?v=ZRaw4B1urQs&list=PL0-S7MOKfBRQ-JmaZ36G4laB8KGmIXlYL&index=14)
 
 ---
 # Setup
